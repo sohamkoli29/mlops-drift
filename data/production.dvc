@@ -1,0 +1,6 @@
+outs:
+- md5: c009c93a03b79b8ceb77ef78788f1e3c.dir
+  size: 124370
+  nfiles: 1
+  hash: md5
+  path: production

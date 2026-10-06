@@ -1,0 +1,15 @@
+{
+  "reference": {
+    "rows": 19536,
+    "positive_rate": 0.2393
+  },
+  "production_pool": {
+    "rows": 19537,
+    "positive_rate": 0.2393
+  },
+  "holdout": {
+    "rows": 9769,
+    "positive_rate": 0.2393
+  },
+  "windows_of_1000_in_production": 19
+}
