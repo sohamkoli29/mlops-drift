@@ -1,0 +1,365 @@
+{
+  "n_rows": 19536,
+  "n_bins": 10,
+  "numeric": {
+    "age": {
+      "mean": 38.59955978705979,
+      "std": 13.690184796980958,
+      "min": 17.0,
+      "max": 90.0,
+      "edges": [
+        22.0,
+        26.0,
+        30.0,
+        33.0,
+        37.0,
+        41.0,
+        46.0,
+        51.0,
+        58.0
+      ],
+      "shares": [
+        0.12244062244062244,
+        0.09756347256347256,
+        0.10355241605241605,
+        0.08005733005733005,
+        0.1104115479115479,
+        0.09833128583128584,
+        0.11102579852579852,
+        0.09423628173628174,
+        0.08973177723177723,
+        0.09264946764946765
+      ]
+    },
+    "education_num": {
+      "mean": 10.08778665028665,
+      "std": 2.5659905383267914,
+      "min": 1.0,
+      "max": 16.0,
+      "edges": [
+        7.0,
+        9.0,
+        10.0,
+        11.0,
+        13.0
+      ],
+      "shares": [
+        0.11783374283374283,
+        0.338503276003276,
+        0.2202088452088452,
+        0.04074529074529074,
+        0.1988124488124488,
+        0.0838963963963964
+      ]
+    },
+    "capital_gain": {
+      "mean": 1065.2276822276822,
+      "std": 7381.875613212495,
+      "min": 0.0,
+      "max": 99999.0,
+      "edges": [
+        0.0
+      ],
+      "shares": [
+        0.9197891072891073,
+        0.08021089271089271
+      ]
+    },
+    "capital_loss": {
+      "mean": 86.97072072072072,
+      "std": 400.42740431960743,
+      "min": 0.0,
+      "max": 3770.0,
+      "edges": [
+        0.0
+      ],
+      "shares": [
+        0.9534193284193284,
+        0.04658067158067158
+      ]
+    },
+    "hours_per_week": {
+      "mean": 40.54217854217854,
+      "std": 12.429864144292639,
+      "min": 1.0,
+      "max": 99.0,
+      "edges": [
+        25.0,
+        35.0,
+        40.0,
+        50.0,
+        55.0
+      ],
+      "shares": [
+        0.11998361998361998,
+        0.09090909090909091,
+        0.4901208026208026,
+        0.18432637182637182,
+        0.029074529074529076,
+        0.08558558558558559
+      ]
+    }
+  },
+  "categorical": {
+    "workclass": {
+      "categories": [
+        "Federal-gov",
+        "Local-gov",
+        "Never-worked",
+        "Private",
+        "Self-emp-inc",
+        "Self-emp-not-inc",
+        "State-gov",
+        "Without-pay",
+        "__MISSING__"
+      ],
+      "shares": {
+        "Federal-gov": 0.030354217854217855,
+        "Local-gov": 0.0642915642915643,
+        "Never-worked": 0.00020475020475020476,
+        "Private": 0.6933353808353808,
+        "Self-emp-inc": 0.03531941031941032,
+        "Self-emp-not-inc": 0.07872645372645373,
+        "State-gov": 0.03900491400491401,
+        "Without-pay": 0.0004095004095004095,
+        "__MISSING__": 0.05835380835380835,
+        "__OTHER__": 0.0
+      }
+    },
+    "education": {
+      "categories": [
+        "10th",
+        "11th",
+        "12th",
+        "1st-4th",
+        "5th-6th",
+        "7th-8th",
+        "9th",
+        "Assoc-acdm",
+        "Assoc-voc",
+        "Bachelors",
+        "Doctorate",
+        "HS-grad",
+        "Masters",
+        "Preschool",
+        "Prof-school",
+        "Some-college"
+      ],
+      "shares": {
+        "10th": 0.028818591318591318,
+        "11th": 0.038595413595413595,
+        "12th": 0.013718263718263719,
+        "1st-4th": 0.004709254709254709,
+        "5th-6th": 0.00998157248157248,
+        "7th-8th": 0.01888820638820639,
+        "9th": 0.015151515151515152,
+        "Assoc-acdm": 0.03199221949221949,
+        "Assoc-voc": 0.04074529074529074,
+        "Bachelors": 0.16682022932022933,
+        "Doctorate": 0.01295045045045045,
+        "HS-grad": 0.3247850122850123,
+        "Masters": 0.05471949221949222,
+        "Preschool": 0.0016891891891891893,
+        "Prof-school": 0.016226453726453725,
+        "Some-college": 0.2202088452088452,
+        "__OTHER__": 0.0
+      }
+    },
+    "marital_status": {
+      "categories": [
+        "Divorced",
+        "Married-AF-spouse",
+        "Married-civ-spouse",
+        "Married-spouse-absent",
+        "Never-married",
+        "Separated",
+        "Widowed"
+      ],
+      "shares": {
+        "Divorced": 0.13692669942669944,
+        "Married-AF-spouse": 0.000819000819000819,
+        "Married-civ-spouse": 0.4543918918918919,
+        "Married-spouse-absent": 0.01254095004095004,
+        "Never-married": 0.3313370188370188,
+        "Separated": 0.03311834561834562,
+        "Widowed": 0.030866093366093365,
+        "__OTHER__": 0.0
+      }
+    },
+    "occupation": {
+      "categories": [
+        "Adm-clerical",
+        "Armed-Forces",
+        "Craft-repair",
+        "Exec-managerial",
+        "Farming-fishing",
+        "Handlers-cleaners",
+        "Machine-op-inspct",
+        "Other-service",
+        "Priv-house-serv",
+        "Prof-specialty",
+        "Protective-serv",
+        "Sales",
+        "Tech-support",
+        "Transport-moving",
+        "__MISSING__"
+      ],
+      "shares": {
+        "Adm-clerical": 0.11343161343161343,
+        "Armed-Forces": 0.0003071253071253071,
+        "Craft-repair": 0.12576781326781328,
+        "Exec-managerial": 0.12423218673218674,
+        "Farming-fishing": 0.029688779688779688,
+        "Handlers-cleaners": 0.042434479934479935,
+        "Machine-op-inspct": 0.06122031122031122,
+        "Other-service": 0.10206797706797707,
+        "Priv-house-serv": 0.004709254709254709,
+        "Prof-specialty": 0.12827600327600328,
+        "Protective-serv": 0.019604832104832104,
+        "Sales": 0.11435298935298935,
+        "Tech-support": 0.02805077805077805,
+        "Transport-moving": 0.0472972972972973,
+        "__MISSING__": 0.05855855855855856,
+        "__OTHER__": 0.0
+      }
+    },
+    "relationship": {
+      "categories": [
+        "Husband",
+        "Not-in-family",
+        "Other-relative",
+        "Own-child",
+        "Unmarried",
+        "Wife"
+      ],
+      "shares": {
+        "Husband": 0.40161752661752664,
+        "Not-in-family": 0.257985257985258,
+        "Other-relative": 0.031889844389844386,
+        "Own-child": 0.1531019656019656,
+        "Unmarried": 0.10815929565929566,
+        "Wife": 0.047246109746109745,
+        "__OTHER__": 0.0
+      }
+    },
+    "race": {
+      "categories": [
+        "Amer-Indian-Eskimo",
+        "Asian-Pac-Islander",
+        "Black",
+        "Other",
+        "White"
+      ],
+      "shares": {
+        "Amer-Indian-Eskimo": 0.00987919737919738,
+        "Asian-Pac-Islander": 0.03137796887796888,
+        "Black": 0.09485053235053235,
+        "Other": 0.0085995085995086,
+        "White": 0.8552927927927928,
+        "__OTHER__": 0.0
+      }
+    },
+    "sex": {
+      "categories": [
+        "Female",
+        "Male"
+      ],
+      "shares": {
+        "Female": 0.3319000819000819,
+        "Male": 0.6680999180999181,
+        "__OTHER__": 0.0
+      }
+    },
+    "native_country": {
+      "categories": [
+        "Cambodia",
+        "Canada",
+        "China",
+        "Columbia",
+        "Cuba",
+        "Dominican-Republic",
+        "Ecuador",
+        "El-Salvador",
+        "England",
+        "France",
+        "Germany",
+        "Greece",
+        "Guatemala",
+        "Haiti",
+        "Holand-Netherlands",
+        "Honduras",
+        "Hong",
+        "Hungary",
+        "India",
+        "Iran",
+        "Ireland",
+        "Italy",
+        "Jamaica",
+        "Japan",
+        "Laos",
+        "Mexico",
+        "Nicaragua",
+        "Outlying-US(Guam-USVI-etc)",
+        "Peru",
+        "Philippines",
+        "Poland",
+        "Portugal",
+        "Puerto-Rico",
+        "Scotland",
+        "South",
+        "Taiwan",
+        "Thailand",
+        "Trinadad&Tobago",
+        "United-States",
+        "Vietnam",
+        "Yugoslavia",
+        "__MISSING__"
+      ],
+      "shares": {
+        "Cambodia": 0.0004606879606879607,
+        "Canada": 0.003276003276003276,
+        "China": 0.002764127764127764,
+        "Columbia": 0.0015868140868140867,
+        "Cuba": 0.002764127764127764,
+        "Dominican-Republic": 0.0020986895986895987,
+        "Ecuador": 0.0007166257166257166,
+        "El-Salvador": 0.0028665028665028664,
+        "England": 0.0025593775593775593,
+        "France": 0.000819000819000819,
+        "Germany": 0.004606879606879607,
+        "Greece": 0.0011261261261261261,
+        "Guatemala": 0.002201064701064701,
+        "Haiti": 0.001382063882063882,
+        "Holand-Netherlands": 5.118755118755119e-05,
+        "Honduras": 0.0005630630630630631,
+        "Hong": 0.0004606879606879607,
+        "Hungary": 0.0004606879606879607,
+        "India": 0.0028665028665028664,
+        "Iran": 0.0012796887796887796,
+        "Ireland": 0.0006654381654381654,
+        "Italy": 0.0019451269451269452,
+        "Jamaica": 0.0024058149058149058,
+        "Japan": 0.0019963144963144963,
+        "Laos": 0.0004606879606879607,
+        "Mexico": 0.020065520065520065,
+        "Nicaragua": 0.0011261261261261261,
+        "Outlying-US(Guam-USVI-etc)": 0.0005118755118755119,
+        "Peru": 0.0008701883701883702,
+        "Philippines": 0.006603194103194103,
+        "Poland": 0.0019963144963144963,
+        "Portugal": 0.0011261261261261261,
+        "Puerto-Rico": 0.003992628992628993,
+        "Scotland": 0.0005118755118755119,
+        "South": 0.0020475020475020475,
+        "Taiwan": 0.0015868140868140867,
+        "Thailand": 0.0007166257166257166,
+        "Trinadad&Tobago": 0.0006142506142506142,
+        "United-States": 0.8956797706797707,
+        "Vietnam": 0.0019963144963144963,
+        "Yugoslavia": 0.0004606879606879607,
+        "__MISSING__": 0.01771089271089271,
+        "__OTHER__": 0.0
+      }
+    }
+  }
+}

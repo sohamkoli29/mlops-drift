@@ -1,0 +1,33 @@
+{
+  "best_model": "gradient_boosting",
+  "cv_comparison": [
+    {
+      "model": "gradient_boosting",
+      "cv_f1": 0.6792,
+      "cv_f1_std": 0.0087,
+      "cv_accuracy": 0.8639,
+      "seconds": 10.5765
+    },
+    {
+      "model": "random_forest",
+      "cv_f1": 0.6525,
+      "cv_f1_std": 0.0116,
+      "cv_accuracy": 0.8438,
+      "seconds": 2.1394
+    },
+    {
+      "model": "logreg",
+      "cv_f1": 0.652,
+      "cv_f1_std": 0.0099,
+      "cv_accuracy": 0.8493,
+      "seconds": 0.6048
+    }
+  ],
+  "holdout": {
+    "accuracy": 0.8663,
+    "precision": 0.7857,
+    "recall": 0.6069,
+    "f1": 0.6848,
+    "roc_auc": 0.9188
+  }
+}

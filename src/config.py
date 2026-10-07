@@ -1,5 +1,6 @@
 """Central config: paths, seed, target and feature definitions."""
 
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,3 +46,10 @@ FEATURES = NUMERIC_FEATURES + CATEGORICAL_FEATURES
 
 # Dropped: fnlwgt is a census sampling weight, not a real predictive feature
 DROP_COLUMNS = ["fnlwgt"]
+
+# --- MLflow ---
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5000")
+EXPERIMENT_NAME = "income-drift"
+MODEL_NAME = "income-classifier"
+CHAMPION_ALIAS = "champion"
+CHALLENGER_ALIAS = "challenger"
