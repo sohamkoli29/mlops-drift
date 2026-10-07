@@ -53,3 +53,9 @@ EXPERIMENT_NAME = "income-drift"
 MODEL_NAME = "income-classifier"
 CHAMPION_ALIAS = "champion"
 CHALLENGER_ALIAS = "challenger"
+
+
+# --- API / prediction log ---
+LOG_DIR = ROOT / "logs"
+PREDICTION_DB = Path(os.getenv("PREDICTION_DB", str(LOG_DIR / "predictions.db")))
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
