@@ -1,5 +1,5 @@
 # Intelligent ML Model Monitoring & Automated Retraining Platform
-Group C12 | Major Project-I, Sem VII, 2026-27
+Major Project, Sem VII, 2026-27
 
 ## Setup
 python -m venv .venv
