@@ -3,6 +3,7 @@ import itertools
 import numpy as np
 import pytest
 from fastapi.testclient import TestClient
+from prometheus_client import REGISTRY
 
 from src.api.main import create_app
 from src.api.model_store import LoadedModel
@@ -123,3 +124,36 @@ def test_no_model_returns_503(tmp_path):
     with TestClient(app) as c:
         assert c.get("/health").status_code == 503
         assert c.post("/predict", json=EXAMPLE).status_code == 503
+
+
+def _sample(name: str, labels: dict) -> float:
+    return REGISTRY.get_sample_value(name, labels) or 0.0
+
+
+def test_live_endpoint(client):
+    assert client.get("/live").json() == {"status": "alive"}
+
+
+def test_metrics_endpoint_exposes_prediction_metrics(client):
+    labels = {"model_version": "1", "prediction": "1"}
+    before = _sample("predictions_total", labels)
+    client.post("/predict", json={**EXAMPLE, "age": 50})
+    assert _sample("predictions_total", labels) == before + 1
+
+    text = client.get("/metrics").text
+    for name in (
+        "api_requests_total",
+        "api_request_latency_seconds_bucket",
+        "prediction_probability_bucket",
+        "api_model_version",
+    ):
+        assert name in text
+
+
+def test_5xx_is_counted_as_error(tmp_path):
+    labels = {"endpoint": "/predict", "status": "503"}
+    before = _sample("api_errors_total", labels)
+    app = create_app(model_loader=failing_loader, request_logger=RequestLogger(tmp_path / "p.db"))
+    with TestClient(app) as c:
+        assert c.post("/predict", json=EXAMPLE).status_code == 503
+    assert _sample("api_errors_total", labels) == before + 1

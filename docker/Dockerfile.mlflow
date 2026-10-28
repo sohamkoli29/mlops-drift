@@ -1,0 +1,13 @@
+FROM python:3.11-slim
+
+ENV PIP_NO_CACHE_DIR=1
+
+RUN pip install mlflow==2.18.0 "sqlalchemy==2.0.54"
+
+WORKDIR /mlflow
+EXPOSE 5000
+
+CMD ["mlflow", "server", \
+     "--backend-store-uri", "sqlite:////mlflow/mlflow.db", \
+     "--artifacts-destination", "/mlflow/artifacts", \
+     "--host", "0.0.0.0", "--port", "5000"]

@@ -1,0 +1,96 @@
+{
+  "uid": "api-overview",
+  "title": "Model API Overview",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": { "from": "now-15m", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "stat", "title": "Champion version",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "api_model_version" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 2, "type": "stat", "title": "Requests / s",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "targets": [{ "refId": "A", "expr": "sum(rate(api_requests_total[1m])) or vector(0)" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 3, "type": "stat", "title": "5xx errors / s",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "targets": [{ "refId": "A", "expr": "sum(rate(api_errors_total[1m])) or vector(0)" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 4, "type": "stat", "title": "Positive rate (income > 50K)",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "percentunit" }, "overrides": [] },
+      "targets": [{
+        "refId": "A",
+        "expr": "sum(rate(predictions_total{prediction=\"1\"}[2m])) / sum(rate(predictions_total[2m]))"
+      }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "Request rate by endpoint and status",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "targets": [{
+        "refId": "A",
+        "expr": "sum by (endpoint, status) (rate(api_requests_total[1m]))",
+        "legendFormat": "{{endpoint}} {{status}}"
+      }]
+    },
+    {
+      "id": 6, "type": "timeseries", "title": "Prediction latency (p50 / p95 / p99)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [
+        {
+          "refId": "A", "legendFormat": "p50",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(api_request_latency_seconds_bucket{endpoint=~\"/predict.*\"}[1m])))"
+        },
+        {
+          "refId": "B", "legendFormat": "p95",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(api_request_latency_seconds_bucket{endpoint=~\"/predict.*\"}[1m])))"
+        },
+        {
+          "refId": "C", "legendFormat": "p99",
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(api_request_latency_seconds_bucket{endpoint=~\"/predict.*\"}[1m])))"
+        }
+      ]
+    },
+    {
+      "id": 7, "type": "timeseries", "title": "Predictions per second by class",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{
+        "refId": "A",
+        "expr": "sum by (prediction) (rate(predictions_total[1m]))",
+        "legendFormat": "class {{prediction}}"
+      }]
+    },
+    {
+      "id": 8, "type": "timeseries", "title": "Mean predicted probability",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "min": 0, "max": 1 }, "overrides": [] },
+      "targets": [{
+        "refId": "A",
+        "expr": "sum(rate(prediction_probability_sum[1m])) / sum(rate(prediction_probability_count[1m]))",
+        "legendFormat": "mean P(>50K)"
+      }]
+    }
+  ]
+}

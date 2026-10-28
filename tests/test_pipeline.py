@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 
 from src.config import REFERENCE_FILE
@@ -11,6 +12,9 @@ def test_pipeline_fits_and_predicts_with_missing_values():
     X, y = load_reference()
     X, y = X.head(2000), y.head(2000)
     pipe = build_pipeline(get_candidates()["logreg"]).fit(X, y)
-    proba = pipe.predict_proba(X.head(10))
+
+    sample = X.head(10).copy()
+    sample.loc[sample.index[0], "occupation"] = np.nan  # force a missing categorical
+    proba = pipe.predict_proba(sample)
     assert proba.shape == (10, 2)
-    assert X.isna().sum().sum() > 0 or True  # NaNs (if any) were handled without error
+    assert np.allclose(proba.sum(axis=1), 1.0)
