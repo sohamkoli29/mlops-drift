@@ -12,3 +12,4 @@ mlartifacts/
 .vscode/
 models/
 logs/
+reports/monitoring/

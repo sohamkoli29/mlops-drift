@@ -32,8 +32,10 @@ def test_stream_ground_truth_and_effects():
     assert all(len(w.X) == 1000 and len(w.y) == 1000 for w in sudden)
     assert sudden[0].shifted_features == []
     assert set(sudden[10].shifted_features) == {"age", "hours_per_week", "marital_status"}
-    assert sudden[10].X["age"].mean() > sudden[0].X["age"].mean() + 5  # 0.8 std ~ 11 years
-    assert (sudden[10].X["marital_status"] == "Divorced").mean() > 0.30
+    assert sudden[10].X["age"].mean() > sudden[0].X["age"].mean() + 3  # 0.5 std ~ 7 years
+    assert (
+        sudden[10].X["marital_status"] == "Divorced"
+    ).mean() > 0.20  # 0.15 swapped + ~0.14 natural
 
 
 @needs_data

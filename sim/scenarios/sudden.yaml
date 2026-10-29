@@ -5,12 +5,12 @@ ramp_windows: 0
 n_windows: 18
 effects:
   - feature: age
-    type: shift_std      # add k * std(reference)
-    value: 0.8
+    type: shift_std
+    value: 0.5
   - feature: hours_per_week
     type: shift_std
-    value: 0.8
+    value: 0.5
   - feature: marital_status
-    type: swap_category  # move `fraction` of rows to `to`
+    type: swap_category
     to: Divorced
-    fraction: 0.30
+    fraction: 0.15
