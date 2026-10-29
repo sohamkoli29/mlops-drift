@@ -1,0 +1,16 @@
+name: gradual
+description: Same shift as sudden, ramping up linearly over 6 windows from window 8
+onset_window: 8
+ramp_windows: 6
+n_windows: 18
+effects:
+  - feature: age
+    type: shift_std
+    value: 0.8
+  - feature: hours_per_week
+    type: shift_std
+    value: 0.8
+  - feature: marital_status
+    type: swap_category
+    to: Divorced
+    fraction: 0.30

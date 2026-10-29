@@ -1,0 +1,16 @@
+name: sudden
+description: Abrupt covariate shift from window 8 onward
+onset_window: 8
+ramp_windows: 0
+n_windows: 18
+effects:
+  - feature: age
+    type: shift_std      # add k * std(reference)
+    value: 0.8
+  - feature: hours_per_week
+    type: shift_std
+    value: 0.8
+  - feature: marital_status
+    type: swap_category  # move `fraction` of rows to `to`
+    to: Divorced
+    fraction: 0.30

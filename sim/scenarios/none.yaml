@@ -1,0 +1,6 @@
+name: none
+description: No-drift control, used to calibrate thresholds and measure false alarms
+onset_window: null
+ramp_windows: 0
+n_windows: 18
+effects: []
