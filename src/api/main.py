@@ -1,12 +1,13 @@
 """Inference API: /predict, /predict/batch, /health, /live, /model-info, /reload, /metrics."""
 
+import json
 import logging
 import threading
 import time
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, Request, Response
+from fastapi import FastAPI, HTTPException, Query, Request, Response
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from src.api import metrics
@@ -15,6 +16,7 @@ from src.api.request_logger import RequestLogger
 from src.api.schemas import (
     BatchPredictRequest,
     BatchPredictResponse,
+    LabelsRequest,
     PredictRequest,
     PredictResponse,
     records_to_frame,
@@ -71,12 +73,15 @@ def create_app(
             raise HTTPException(status_code=503, detail="No model loaded")
         return loaded
 
-    def safe_log(features, predictions, probabilities, version, latency_ms) -> None:
+    def safe_log(features, predictions, probabilities, version, latency_ms) -> int | None:
         # a logging failure must never break a prediction
         try:
-            app.state.logger.log_batch(features, predictions, probabilities, version, latency_ms)
+            return app.state.logger.log_batch(
+                features, predictions, probabilities, version, latency_ms
+            )
         except Exception:
             log.exception("Failed to write prediction log")
+            return None
 
     @app.get("/live")
     def live():
@@ -130,11 +135,24 @@ def create_app(
         latency_ms = (time.perf_counter() - start) * 1000
         preds = (proba >= 0.5).astype(int).tolist()
         probs = [round(float(p), 6) for p in proba]
-        safe_log(rows, preds, probs, loaded.version, latency_ms)
+        first_id = safe_log(rows, preds, probs, loaded.version, latency_ms)
         metrics.record_predictions(loaded.version, preds, probs)
         return BatchPredictResponse(
-            predictions=preds, probabilities=probs, model_version=loaded.version
+            predictions=preds,
+            probabilities=probs,
+            model_version=loaded.version,
+            first_log_id=first_id,
         )
+
+    @app.post("/labels")
+    def add_labels(req: LabelsRequest):
+        """Delayed ground truth: used for live performance, retraining and rollback checks."""
+        return {"updated": app.state.logger.update_labels(req.ids, req.labels)}
+
+    @app.get("/log/labeled")
+    def labeled_rows(after_id: int = 0, limit: int = Query(6000, ge=1, le=20000)):
+        df = app.state.logger.read_labeled(after_id=after_id, limit=limit)
+        return {"count": len(df), "records": json.loads(df.to_json(orient="records"))}
 
     @app.post("/reload")
     def reload_model():

@@ -49,3 +49,17 @@ def test_none_scenario_has_no_drift_and_seeds_differ():
     b = list(stream(load_scenario("none"), X_pool, y_pool, std, seed=2))
     assert not any(w.drift_active for w in a)
     assert not a[0].X.equals(b[0].X)
+
+
+@needs_data
+def test_concept_scenario_changes_labels_only_after_onset():
+    from src.data.loader import load_production, load_reference
+
+    X_ref, _ = load_reference()
+    X_pool, y_pool = load_production()
+    std = reference_std(X_ref)
+    plain = list(stream(load_scenario("sudden"), X_pool, y_pool, std, seed=1))
+    concept = list(stream(load_scenario("sudden_concept"), X_pool, y_pool, std, seed=1))
+    assert plain[3].y.equals(concept[3].y)  # identical before onset
+    educated = concept[10].X["education_num"] >= 13
+    assert concept[10].y[educated].mean() < 0.5 * plain[10].y[educated].mean()

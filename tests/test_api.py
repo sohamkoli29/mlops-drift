@@ -157,3 +157,35 @@ def test_5xx_is_counted_as_error(tmp_path):
     with TestClient(app) as c:
         assert c.post("/predict", json=EXAMPLE).status_code == 503
     assert _sample("api_errors_total", labels) == before + 1
+
+
+def test_batch_returns_log_ids_and_labels_roundtrip(client):
+    records = [{**EXAMPLE, "age": a} for a in (25, 45, 60)]
+    body = client.post("/predict/batch", json={"records": records}).json()
+    first = body["first_log_id"]
+    assert first == 1
+    r = client.post("/labels", json={"ids": [first, first + 1, first + 2], "labels": [0, 1, 1]})
+    assert r.json() == {"updated": 3}
+    out = client.get("/log/labeled").json()
+    assert out["count"] == 3
+    assert [x["label"] for x in out["records"]] == [0, 1, 1]
+    assert out["records"][0]["model_version"] == "1"
+
+
+def test_unlabeled_rows_are_not_returned(client):
+    client.post("/predict", json=EXAMPLE)
+    assert client.get("/log/labeled").json()["count"] == 0
+
+
+def test_labeled_after_id_and_limit(client):
+    records = [{**EXAMPLE, "age": 30 + i} for i in range(5)]
+    client.post("/predict/batch", json={"records": records})
+    client.post("/labels", json={"ids": [1, 2, 3, 4, 5], "labels": [0, 1, 0, 1, 0]})
+    assert client.get("/log/labeled", params={"after_id": 2}).json()["count"] == 3
+    last_two = client.get("/log/labeled", params={"limit": 2}).json()["records"]
+    assert [x["id"] for x in last_two] == [4, 5]
+
+
+def test_label_validation(client):
+    assert client.post("/labels", json={"ids": [1, 2], "labels": [1]}).status_code == 422
+    assert client.post("/labels", json={"ids": [1], "labels": [2]}).status_code == 422

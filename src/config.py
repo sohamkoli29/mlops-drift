@@ -64,3 +64,6 @@ WINDOW_SIZE = int(os.getenv("WINDOW_SIZE", "1000"))
 MONITOR_DIR = Path(os.getenv("MONITOR_DIR", str(REPORTS_DIR / "live")))
 MONITOR_PORT = int(os.getenv("MONITOR_PORT", "8001"))
 MONITOR_INTERVAL = float(os.getenv("MONITOR_INTERVAL", "15"))
+
+# --- Retraining ---
+PREVIOUS_ALIAS = "previous"

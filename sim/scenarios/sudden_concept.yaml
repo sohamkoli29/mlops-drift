@@ -1,0 +1,21 @@
+name: sudden_concept
+description: Sudden covariate shift plus a concept change (high education stops predicting income)
+onset_window: 8
+ramp_windows: 0
+n_windows: 18
+effects:
+  - feature: age
+    type: shift_std
+    value: 0.8
+  - feature: hours_per_week
+    type: shift_std
+    value: 0.8
+  - feature: marital_status
+    type: swap_category
+    to: Divorced
+    fraction: 0.30
+label_effects:
+  - feature: education_num
+    ge: 13
+    to: 0
+    fraction: 0.8

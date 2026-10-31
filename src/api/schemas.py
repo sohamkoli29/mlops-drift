@@ -2,7 +2,7 @@
 
 import numpy as np
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from src.config import CATEGORICAL_FEATURES, FEATURES
 
@@ -78,3 +78,19 @@ class BatchPredictResponse(BaseModel):
     predictions: list[int]
     probabilities: list[float]
     model_version: str
+    first_log_id: int | None = None
+
+
+class LabelsRequest(BaseModel):
+    """Delayed ground truth for rows already logged."""
+
+    ids: list[int] = Field(min_length=1, max_length=5000)
+    labels: list[int] = Field(min_length=1, max_length=5000)
+
+    @model_validator(mode="after")
+    def _check(self):
+        if len(self.ids) != len(self.labels):
+            raise ValueError("ids and labels must have the same length")
+        if any(v not in (0, 1) for v in self.labels):
+            raise ValueError("labels must be 0 or 1")
+        return self

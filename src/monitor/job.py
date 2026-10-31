@@ -14,6 +14,7 @@ import os
 import time
 from pathlib import Path
 
+import pandas as pd
 from prometheus_client import start_http_server
 
 from src.api.request_logger import RequestLogger
@@ -53,6 +54,24 @@ def write_state(out_dir, state: dict) -> None:
 
 def reset_to_now(logger: RequestLogger, out_dir) -> None:
     write_state(out_dir, {"last_id": logger.max_id(), "next_window": 0})
+
+
+_REF_CACHE: dict = {}
+
+
+def get_reference(out_dir, base):
+    """The reference to compare against: the one saved by the last promotion, else the base."""
+    path = Path(out_dir) / "reference_current.parquet"
+    if not path.exists():
+        _REF_CACHE.clear()
+        return base
+    st = path.stat()
+    key = (st.st_mtime_ns, st.st_size)
+    if _REF_CACHE.get("key") != key:
+        df = clean_frame(pd.read_parquet(path))
+        _REF_CACHE.update(key=key, df=df)
+        log.info("Using updated reference (%d rows)", len(df))
+    return _REF_CACHE["df"]
 
 
 def process_available(
@@ -136,7 +155,7 @@ def main() -> None:
     log.info("Serving metrics on :%d, reading %s", args.port, args.db)
     while True:
         try:
-            process_available(logger, reference, out_dir, args.window_size)
+            process_available(logger, get_reference(out_dir, reference), out_dir, args.window_size)
         except Exception:
             log.exception("Monitoring check failed; will retry")
         time.sleep(args.interval)

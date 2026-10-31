@@ -42,16 +42,23 @@ def train_and_log(
     y_eval: pd.Series,
     run_name: str,
     tags: dict | None = None,
+    sample_weight=None,
 ) -> tuple[str, dict]:
     """Fit a pipeline, log params/metrics/model/reference profile. Returns (run_id, metrics)."""
     with mlflow.start_run(run_name=run_name) as run:
         mlflow.set_tags(tags or {})
 
         pipe = build_pipeline(get_candidates()[model_name])
-        pipe.fit(X_train, y_train)
+        fit_params = {"model__sample_weight": sample_weight} if sample_weight is not None else {}
+        pipe.fit(X_train, y_train, **fit_params)
 
         mlflow.log_params(
-            {"model_type": model_name, "n_train": len(X_train), **_model_params(pipe)}
+            {
+                "model_type": model_name,
+                "n_train": len(X_train),
+                "sample_weighted": str(sample_weight is not None),
+                **_model_params(pipe),
+            }
         )
         metrics = evaluate(pipe, X_eval, y_eval)
         mlflow.log_metrics(metrics)

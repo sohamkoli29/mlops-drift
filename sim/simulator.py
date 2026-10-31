@@ -66,6 +66,18 @@ def apply_effects(
     return X
 
 
+def apply_label_effects(X, y, label_effects: list[dict], intensity: float, rng) -> pd.Series:
+    """Concept drift: set the label of a fraction of rows matching a condition."""
+    y = y.copy()
+    for eff in label_effects:
+        candidates = np.flatnonzero((X[eff["feature"]] >= eff["ge"]).to_numpy())
+        n = int(round(len(candidates) * eff["fraction"] * intensity))
+        if n > 0:
+            chosen = rng.choice(candidates, size=n, replace=False)
+            y.iloc[chosen] = eff["to"]
+    return y
+
+
 def stream(
     scenario: dict,
     X_pool: pd.DataFrame,
@@ -80,6 +92,7 @@ def stream(
     n_possible = len(X_pool) // window_size
     n_windows = min(scenario["n_windows"], n_possible)
     effects = scenario.get("effects", [])
+    label_effects = scenario.get("label_effects", [])
     shifted = [e["feature"] for e in effects]
 
     for i in range(n_windows):
@@ -88,6 +101,8 @@ def stream(
         y = y_pool.iloc[rows].reset_index(drop=True)
         intensity = intensity_at(scenario, i)
         if intensity > 0:
+            if label_effects:
+                y = apply_label_effects(X, y, label_effects, intensity, rng)
             X = apply_effects(X, effects, intensity, ref_std, rng)
         yield Window(
             index=i,
