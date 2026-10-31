@@ -1,0 +1,123 @@
+{
+  "uid": "drift-overview",
+  "title": "Drift Monitoring",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "stat", "title": "Window severity",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "drift_window_severity" }],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [{
+            "type": "value",
+            "options": {
+              "0": { "text": "NONE", "color": "green" },
+              "1": { "text": "MEDIUM", "color": "orange" },
+              "2": { "text": "HIGH", "color": "red" }
+            }
+          }]
+        },
+        "overrides": []
+      },
+      "options": { "colorMode": "background", "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 2, "type": "stat", "title": "Detectors agreeing (of 3)",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "drift_detectors_agreeing" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 3, "type": "stat", "title": "Last window processed",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "drift_last_window_id" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 4, "type": "stat", "title": "Rows waiting for a full window",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "refId": "A", "expr": "drift_pending_rows" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "Severity timeline (0 none, 1 medium, 2 high)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "min": 0, "max": 2, "custom": { "lineInterpolation": "stepAfter" } },
+        "overrides": []
+      },
+      "targets": [
+        { "refId": "A", "expr": "drift_window_severity", "legendFormat": "window (PSI based)" },
+        { "refId": "B", "expr": "drift_detector_severity", "legendFormat": "{{detector}}" }
+      ]
+    },
+    {
+      "id": 6, "type": "bargauge", "title": "Detectors flagging each feature (latest window)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "min": 0, "max": 3 }, "overrides": [] },
+      "targets": [{
+        "refId": "A", "instant": true,
+        "expr": "sum by (feature) (drift_feature_flagged)",
+        "legendFormat": "{{feature}}"
+      }],
+      "options": { "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 7, "type": "timeseries", "title": "PSI per feature (0.10 medium, 0.25 high)",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "thresholdsStyle": { "mode": "line" } },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 0.1 },
+              { "color": "red", "value": 0.25 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [{
+        "refId": "A", "expr": "drift_score{detector=\"psi\"}", "legendFormat": "{{feature}}"
+      }]
+    },
+    {
+      "id": 8, "type": "timeseries", "title": "KS statistic D per numeric feature",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{
+        "refId": "A", "expr": "drift_score{detector=\"ks\"}", "legendFormat": "{{feature}}"
+      }]
+    },
+    {
+      "id": 9, "type": "timeseries", "title": "Wasserstein (in reference std) per numeric feature",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{
+        "refId": "A", "expr": "drift_score{detector=\"wasserstein\"}", "legendFormat": "{{feature}}"
+      }]
+    },
+    {
+      "id": 10, "type": "timeseries", "title": "Champion version vs drift severity",
+      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 28 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "api_model_version", "legendFormat": "champion version" },
+        { "refId": "B", "expr": "drift_window_severity", "legendFormat": "severity (0-2)" }
+      ]
+    }
+  ]
+}

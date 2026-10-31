@@ -62,3 +62,10 @@ def test_categorical_change_names_the_category(ref):
 def test_explanation_hit_without_ground_truth_is_none(ref):
     a = analyze_window(ref, make_frame(1000, seed=5))
     assert explanation_hit(a, []) is None
+
+
+def test_feature_scores_cover_every_detector_and_feature(ref):
+    a = analyze_window(ref, make_frame(1000, seed=6))
+    assert set(a["feature_scores"]) == {"psi", "ks", "wasserstein"}
+    assert len(a["feature_scores"]["psi"]) == 13
+    assert len(a["feature_scores"]["ks"]) == 5

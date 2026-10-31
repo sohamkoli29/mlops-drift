@@ -41,6 +41,31 @@ services:
       start_period: 15s
     restart: unless-stopped
 
+  monitor:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.monitor
+    image: mlops-drift-monitor:latest
+    environment:
+      PREDICTION_DB: /app/logs/predictions.db
+      MONITOR_DIR: /app/monitor
+      MONITOR_INTERVAL: "10"
+    ports:
+      - "8001:8001"
+    volumes:
+      - prediction_logs:/app/logs
+      - ./data/reference:/app/data/reference:ro
+      - ./reports/live:/app/monitor
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/metrics')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
   prometheus:
     image: prom/prometheus:v2.55.1
     ports:

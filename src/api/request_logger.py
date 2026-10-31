@@ -63,6 +63,10 @@ class RequestLogger:
         with closing(self._connect()) as conn:
             return conn.execute("SELECT COUNT(*) FROM predictions").fetchone()[0]
 
+    def max_id(self) -> int:
+        with closing(self._connect()) as conn:
+            return conn.execute("SELECT COALESCE(MAX(id), 0) FROM predictions").fetchone()[0]
+
     def read(self, after_id: int = 0, limit: int | None = None) -> pd.DataFrame:
         sql = "SELECT * FROM predictions WHERE id > ? ORDER BY id"
         if limit:

@@ -129,6 +129,13 @@ def analyze_window(
         "agreeing_detectors": agreeing,
         "detectors": per_detector,
         "top_features": top,
+        "feature_scores": {
+            name: {
+                f: {"score": round(float(r.score), 4), "flagged": bool(r.flagged)}
+                for f, r in res.items()
+            }
+            for name, res in results.items()
+        },
         "summary": summary,
     }
 

@@ -59,3 +59,8 @@ CHALLENGER_ALIAS = "challenger"
 LOG_DIR = ROOT / "logs"
 PREDICTION_DB = Path(os.getenv("PREDICTION_DB", str(LOG_DIR / "predictions.db")))
 API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
+# --- Monitoring ---
+WINDOW_SIZE = int(os.getenv("WINDOW_SIZE", "1000"))
+MONITOR_DIR = Path(os.getenv("MONITOR_DIR", str(REPORTS_DIR / "live")))
+MONITOR_PORT = int(os.getenv("MONITOR_PORT", "8001"))
+MONITOR_INTERVAL = float(os.getenv("MONITOR_INTERVAL", "15"))

@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+COPY requirements-monitor.txt .
+RUN pip install -r requirements-monitor.txt
+
+COPY src ./src
+RUN mkdir -p /app/monitor /app/logs
+
+EXPOSE 8001
+CMD ["python", "-m", "src.monitor.job"]
