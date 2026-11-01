@@ -1,0 +1,6 @@
+seed,window,promoted,promote,reason,champion_f1,challenger_f1,f1_gain,champion_ms_per_row,challenger_ms_per_row,n_eval
+200,12,True,True,F1 gain +0.0170 and latency acceptable,0.366,0.383,0.017,0.0118,0.0088,1500
+201,12,True,True,F1 gain +0.0112 and latency acceptable,0.4052,0.4164,0.0112,0.0121,0.0082,1500
+202,12,False,False,F1 gain -0.0417 is below the required 0.01,0.3429,0.3012,-0.0417,0.0073,0.0074,1500
+203,12,True,True,F1 gain +0.0349 and latency acceptable,0.3917,0.4266,0.0349,0.0075,0.0077,1500
+204,12,False,False,F1 gain +0.0021 is below the required 0.01,0.3788,0.381,0.0021,0.0081,0.008,1500

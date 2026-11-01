@@ -15,3 +15,5 @@ logs/
 reports/monitoring/
 reports/live/
 reports/live_flow/
+load/samples.json
+reports/load/

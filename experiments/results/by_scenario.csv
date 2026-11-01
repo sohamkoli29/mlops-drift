@@ -1,0 +1,13 @@
+scenario,detector,false_alarm_rate,recall,delay_mean,delay_std,missed_runs,runs
+none,psi,0.0,,,,0,5
+none,ks,0.03333333333333333,,,,0,5
+none,wasserstein,0.01111111111111111,,,,0,5
+none,vote_2of3,0.0,,,,0,5
+sudden,psi,0.0,1.0,0.0,0.0,0,5
+sudden,ks,0.05,1.0,0.0,0.0,0,5
+sudden,wasserstein,0.0,1.0,0.0,0.0,0,5
+sudden,vote_2of3,0.0,1.0,0.0,0.0,0,5
+gradual,psi,0.0,1.0,0.0,0.0,0,5
+gradual,ks,0.05,1.0,0.0,0.0,0,5
+gradual,wasserstein,0.0,1.0,0.0,0.0,0,5
+gradual,vote_2of3,0.0,1.0,0.0,0.0,0,5

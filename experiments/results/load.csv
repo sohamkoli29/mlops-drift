@@ -1,0 +1,7 @@
+run,endpoint,Request Count,Failure Count,Requests/s,p50 ms,p95 ms,p99 ms
+with_monitor,/predict,6201,0,52.19,140,660,1200
+with_monitor,/predict/batch,634,0,5.34,160,700,1200
+with_monitor,Aggregated,7444,0,62.65,130,630,1200
+without_monitor,/predict,6366,0,53.55,130,640,1300
+without_monitor,/predict/batch,640,0,5.38,150,640,1100
+without_monitor,Aggregated,7668,0,64.5,120,610,1200
