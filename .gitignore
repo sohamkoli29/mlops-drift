@@ -10,7 +10,7 @@ mlartifacts/
 *.db
 .idea/
 .vscode/
-models/
+
 logs/
 reports/monitoring/
 reports/live/

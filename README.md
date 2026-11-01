@@ -10,3 +10,5 @@ pre-commit install
 ## Data
 python -m src.data.make_dataset
 python -m src.data.split_data
+
+![CI](https://github.com/sohamkoli29/mlops-drift/actions/workflows/ci.yml/badge.svg)

@@ -6,21 +6,21 @@
       "cv_f1": 0.6792,
       "cv_f1_std": 0.0087,
       "cv_accuracy": 0.8639,
-      "seconds": 10.5765
+      "seconds": 25.2696
     },
     {
       "model": "random_forest",
       "cv_f1": 0.6525,
       "cv_f1_std": 0.0116,
       "cv_accuracy": 0.8438,
-      "seconds": 2.1394
+      "seconds": 4.3783
     },
     {
       "model": "logreg",
       "cv_f1": 0.652,
       "cv_f1_std": 0.0099,
       "cv_accuracy": 0.8493,
-      "seconds": 0.6048
+      "seconds": 1.2357
     }
   ],
   "holdout": {

@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff==0.7.4
+      - run: ruff check .
+      - run: ruff format --check .
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt pytest==8.3.3
+      - name: Restore dataset cache
+        id: data-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/raw
+            data/reference
+            data/production
+            data/holdout
+          key: data-${{ hashFiles('src/data/make_dataset.py', 'src/data/split_data.py', 'src/config.py') }}
+      - name: Build dataset
+        if: steps.data-cache.outputs.cache-hit != 'true'
+        run: |
+          python -m src.data.make_dataset || (sleep 30 && python -m src.data.make_dataset)
+          python -m src.data.split_data
+      - run: pytest -q
+
+  docker:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: [api, monitor, mlflow]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.${{ matrix.image }}
+          push: false
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}

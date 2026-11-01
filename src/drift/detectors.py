@@ -1,15 +1,48 @@
-"""Detector registry and a helper that runs all of them on one window."""
+"""Detector registry, calibrated thresholds and a helper that runs all detectors on a window."""
+
+import json
+import os
+from pathlib import Path
 
 import pandas as pd
 
 from src.drift.base import Detector
 from src.drift.ks import KSDetector
-from src.drift.psi import PSIDetector
-from src.drift.wasserstein import WassersteinDetector
+from src.drift.psi import PSI_MEDIUM, PSIDetector
+from src.drift.wasserstein import DEFAULT_THRESHOLD, WassersteinDetector
+
+THRESHOLD_FILE = Path(__file__).with_name("thresholds.json")
+
+DEFAULT_THRESHOLDS = {
+    "psi": {"threshold": PSI_MEDIUM},
+    "ks": {"alpha": 0.05},
+    "wasserstein": {"default": DEFAULT_THRESHOLD, "per_feature": {}},
+}
 
 
-def get_detectors() -> dict[str, Detector]:
-    return {d.name: d for d in (PSIDetector(), KSDetector(), WassersteinDetector())}
+def load_thresholds(path=None) -> dict:
+    """Calibrated thresholds merged over the defaults.
+
+    DRIFT_THRESHOLDS_FILE overrides the path. A missing file means defaults.
+    """
+    path = Path(path or os.getenv("DRIFT_THRESHOLDS_FILE", THRESHOLD_FILE))
+    merged = {k: dict(v) for k, v in DEFAULT_THRESHOLDS.items()}
+    if path.is_file():
+        data = json.loads(path.read_text())
+        for key in merged:
+            merged[key].update(data.get(key, {}))
+    return merged
+
+
+def get_detectors(thresholds: dict | None = None) -> dict[str, Detector]:
+    t = thresholds or load_thresholds()
+    w = t["wasserstein"]
+    detectors = (
+        PSIDetector(t["psi"]["threshold"]),
+        KSDetector(t["ks"]["alpha"]),
+        WassersteinDetector(w["default"], w["per_feature"]),
+    )
+    return {d.name: d for d in detectors}
 
 
 def score_all(

@@ -1,0 +1,44 @@
+{
+  "thresholds": {
+    "psi": {
+      "threshold": 0.1
+    },
+    "ks": {
+      "alpha": 0.02
+    },
+    "wasserstein": {
+      "default": 0.1,
+      "per_feature": {
+        "age": 0.114,
+        "capital_gain": 0.092,
+        "capital_loss": 0.098,
+        "education_num": 0.102,
+        "hours_per_week": 0.102
+      }
+    }
+  },
+  "calibrated_on": {
+    "seeds": 10,
+    "windows": 180
+  },
+  "false_alarm_rates": {
+    "default thresholds (fit seeds)": {
+      "psi": 0.0,
+      "ks": 0.0611,
+      "wasserstein": 0.0111,
+      "agree_2of3": 0.0111
+    },
+    "calibrated (fit seeds)": {
+      "psi": 0.0,
+      "ks": 0.0333,
+      "wasserstein": 0.0111,
+      "agree_2of3": 0.0056
+    },
+    "calibrated (unseen seeds)": {
+      "psi": 0.0,
+      "ks": 0.0333,
+      "wasserstein": 0.0222,
+      "agree_2of3": 0.0111
+    }
+  }
+}

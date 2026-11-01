@@ -1,0 +1,26 @@
+stages:
+  profile:
+    cmd: python -m src.drift.profile
+    deps:
+      - data/reference
+      - src/config.py
+      - src/data/loader.py
+      - src/drift/profile.py
+    outs:
+      - reports/reference_profile.json:
+          cache: false
+
+  train:
+    cmd: python -m src.train.train
+    deps:
+      - data/reference
+      - data/holdout
+      - src/config.py
+      - src/data/loader.py
+      - src/train/pipeline.py
+      - src/train/train.py
+    outs:
+      - models/baseline.joblib
+    metrics:
+      - reports/baseline_metrics.json:
+          cache: false

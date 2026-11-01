@@ -1,0 +1,65 @@
+schema: '2.0'
+stages:
+  profile:
+    cmd: python -m src.drift.profile
+    deps:
+    - path: data/reference
+      hash: md5
+      md5: e40e17100b7b4a1d9e5962f046ecf5a5.dir
+      size: 124775
+      nfiles: 1
+    - path: src/config.py
+      hash: md5
+      md5: 2128df2b127a87d33c65e98be39b39bf
+      size: 1995
+    - path: src/data/loader.py
+      hash: md5
+      md5: a8ee4e6c26518a06df874f4af5565ec2
+      size: 977
+    - path: src/drift/profile.py
+      hash: md5
+      md5: 57e9e9c55d8705445c67882c2588c085
+      size: 3237
+    outs:
+    - path: reports/reference_profile.json
+      hash: md5
+      md5: e1a8019bf58cdd5ce60c8efc566bddee
+      size: 9863
+  train:
+    cmd: python -m src.train.train
+    deps:
+    - path: data/holdout
+      hash: md5
+      md5: 868b2e00190e07b4d7554d498cfeef76.dir
+      size: 68088
+      nfiles: 1
+    - path: data/reference
+      hash: md5
+      md5: e40e17100b7b4a1d9e5962f046ecf5a5.dir
+      size: 124775
+      nfiles: 1
+    - path: src/config.py
+      hash: md5
+      md5: 2128df2b127a87d33c65e98be39b39bf
+      size: 1995
+    - path: src/data/loader.py
+      hash: md5
+      md5: a8ee4e6c26518a06df874f4af5565ec2
+      size: 977
+    - path: src/train/pipeline.py
+      hash: md5
+      md5: 9870c16a2b0dc651c4d1f64190ca82f7
+      size: 1484
+    - path: src/train/train.py
+      hash: md5
+      md5: 9257289b37ed1bab2db1fba8fb4136d9
+      size: 2731
+    outs:
+    - path: models/baseline.joblib
+      hash: md5
+      md5: 9c7a6530599c64426328d64fc464e21b
+      size: 143403
+    - path: reports/baseline_metrics.json
+      hash: md5
+      md5: 7eceb441030a0e14d579efeb7f50f0f2
+      size: 668
